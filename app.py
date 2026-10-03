@@ -9,6 +9,9 @@ from extractor import extract_text
 from organizer import apply_plan, undo
 from scanner import scan_folder
 
+APP_NAME = "Organizr"
+TAGLINE = "An AI file organizer that sorts by what's inside. Runs fully offline with Gemma via Ollama."
+
 ICONS = {
     "Lecture Notes": "📚",
     "Fee Receipts": "🧾",
@@ -18,23 +21,23 @@ ICONS = {
     "Other": "📦",
 }
 
-st.set_page_config(page_title="AI File Organizer", page_icon="📁")
+st.set_page_config(page_title=APP_NAME, page_icon="📁")
 
 st.markdown(
-    """
+    f"""
 <style>
-.hero {padding: 1.4rem 1.6rem; border-radius: 16px;
+.hero {{padding: 1.4rem 1.6rem; border-radius: 16px;
        background: linear-gradient(135deg, #6C5CE7 0%, #a29bfe 100%);
-       margin-bottom: 1.2rem;}
-.hero h1 {margin: 0; color: white; font-size: 2rem;}
-.hero p {margin: .3rem 0 0 0; color: #f1f0ff;}
-.chip {display: inline-block; padding: .35rem .8rem; margin: .2rem .3rem .2rem 0;
-       border-radius: 999px; background: #1A1D29; border: 1px solid #6C5CE7;}
-.stButton > button {border-radius: 10px;}
+       margin-bottom: 1.2rem;}}
+.hero h1 {{margin: 0; color: white; font-size: 2rem;}}
+.hero p {{margin: .3rem 0 0 0; color: #f1f0ff;}}
+.chip {{display: inline-block; padding: .35rem .8rem; margin: .2rem .3rem .2rem 0;
+       border-radius: 999px; background: #1A1D29; border: 1px solid #6C5CE7;}}
+.stButton > button {{border-radius: 10px;}}
 </style>
 <div class="hero">
-  <h1>📁 AI File Organizer</h1>
-  <p>Sorts files by what's inside them. Runs fully offline with Gemma via Ollama.</p>
+  <h1>📁 {APP_NAME}</h1>
+  <p>{TAGLINE}</p>
 </div>
 """,
     unsafe_allow_html=True,
