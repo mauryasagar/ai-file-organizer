@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+/* ---------- Base type: force DM Sans everywhere except icons ---------- */
+html, body, .stApp,
+.stApp :is(p, div, span, label, button, input, textarea, li, a, small, h1, h2, h3):not([data-testid="stIconMaterial"]) {
+  font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+html {font-size: 16px;}
+.stApp {font-size: 15.5px; line-height: 1.55; color: #1F1B16; -webkit-font-smoothing: antialiased; letter-spacing: 0;}
+#MainMenu, footer {visibility: hidden;}
+[data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"],
+[data-testid="stStatusWidget"] {display: none !important;}
+
+/* ---------- Backdrop ---------- */
+.stApp {
+  background:
+    radial-gradient(700px 500px at 8% 12%, rgba(181,72,42,.22), transparent 60%),
+    radial-gradient(650px 500px at 92% 18%, rgba(224,170,92,.28), transparent 60%),
+    radial-gradient(700px 600px at 70% 95%, rgba(120,150,110,.20), transparent 60%),
+    #F6F1E7;
+  background-attachment: fixed;
+}
+[data-testid="stAppViewContainer"], [data-testid="stMain"] {background: transparent !important;}
+.block-container {padding-top: 2.4rem; padding-bottom: 3rem; max-width: 1250px;}
+
+/* ---------- Brand (Fraunces) ---------- */
+a.brand, a.brand:visited, a.brand:hover {
+  font-family: 'Fraunces', Georgia, serif !important; font-size: 32px; font-weight: 800; letter-spacing: -.02em;
+  background: linear-gradient(135deg, #B5482A, #D9803F);
+  -webkit-background-clip: text; background-clip: text; color: transparent !important;
+  text-decoration: none !important; display: inline-block; line-height: 1.15;
+}
+
+/* ---------- Sidebar (frosted) ---------- */
+[data-testid="stSidebar"] {
+  background: rgba(255,250,240,.78) !important;
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border-right: 1px solid rgba(255,255,255,.7);
+  box-shadow: 4px 0 30px rgba(120,90,50,.08);
+}
+[data-testid="stSidebarUserContent"] {padding-top: 3rem;}
+[data-testid="stSidebarCollapseButton"], [data-testid="stSidebarHeader"] {display: none !important;}
+.privacy {font-size: 13.5px; color: #5C5446; margin: .3rem 0 .4rem 2px; line-height: 1.45;}
+.eyebrow {font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+          color: #7C705A; margin: 1.5rem 0 .5rem 0;}
+.hist {font-size: 15px; font-weight: 600; padding: 9px 12px; color: #2B261E; border-radius: 10px;
+       background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.8); margin-bottom: 6px;}
+.hist span {font-size: 13px; font-weight: 500; color: #6B614F;}
+.statusbar {display: flex; align-items: center; margin-top: 1.4rem; padding: 10px 14px;
+            border-radius: 12px; background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.85);
+            font-size: 14px; font-weight: 600; color: #3B352B;}
+.dot {width: 8px; height: 8px; border-radius: 50%; background: #3FA66B; margin-right: 9px; display: inline-block;
+      flex-shrink: 0; box-shadow: 0 0 0 4px rgba(63,166,107,.22);}
+
+/* ---------- Mobile top bar (hidden on desktop) ---------- */
+.st-key-mobilebar {display: none;}
+
+/* ---------- Typography ---------- */
+.title {font-family: 'Fraunces', Georgia, serif !important; font-size: clamp(30px, 6vw, 46px); font-weight: 700;
+        letter-spacing: -.02em; line-height: 1.1; color: #1F1B16; margin-bottom: .6rem; overflow-wrap: anywhere;}
+.sub {font-size: 15px; font-weight: 500; color: #5C5446; margin: .5rem 0 1rem 0; line-height: 1.5;}
+.fname {font-weight: 700; font-size: 16.5px; color: #1F1B16; overflow-wrap: anywhere; padding-top: 6px;}
+.reason {font-size: 14px; color: #5C5446; margin-top: 4px; padding-bottom: 14px; line-height: 1.5;}
+.warn {color: #B5482A; font-weight: 700;}
+
+/* ---------- Glass surfaces ---------- */
+div[data-testid="stVerticalBlockBorderWrapper"] {
+  background: rgba(255,252,245,.62) !important;
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255,255,255,.8) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 28px rgba(120,90,50,.10), inset 0 1px 0 rgba(255,255,255,.8);
+  padding: 14px 8px;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+div[data-testid="stVerticalBlockBorderWrapper"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 34px rgba(120,90,50,.16), inset 0 1px 0 rgba(255,255,255,.9);
+}
+.pbox {padding: 16px; border-radius: 14px; font-size: 14px; line-height: 1.65; color: #3B352B;
+       background: rgba(255,252,245,.7); border: 1px solid rgba(255,255,255,.85);
+       box-shadow: 0 6px 22px rgba(120,90,50,.10);
+       white-space: pre-wrap; word-break: break-word;
+       font-family: ui-monospace, 'Cascadia Code', Consolas, monospace !important;}
+.pname {font-family: 'Fraunces', Georgia, serif !important; font-weight: 700; font-size: 22px; letter-spacing: -.01em;
+        margin-bottom: .7rem; overflow-wrap: anywhere;}
+.pwhy {font-size: 15px; line-height: 1.6; color: #3B352B;}
+.banner {padding: 18px 22px; border-radius: 16px; margin: 1rem 0;
+         background: rgba(226,242,229,.7); border: 1px solid rgba(255,255,255,.85);
+         box-shadow: 0 8px 28px rgba(60,120,80,.12);}
+.banner b {color: #1F5A33; font-size: 18px; font-family: 'Fraunces', Georgia, serif !important; font-weight: 700;}
+.banner div {color: #2F6B47; font-size: 14.5px; margin-top: 4px;}
+.fcard {padding: 16px 18px; border-radius: 16px; margin-bottom: 12px;
+        background: rgba(255,252,245,.65); border: 1px solid rgba(255,255,255,.85);
+        box-shadow: 0 8px 26px rgba(120,90,50,.10);}
+.fcard b {font-family: 'Fraunces', Georgia, serif !important; font-weight: 700; font-size: 18px;}
+.fcard span {font-size: 14.5px; color: #5C5446; overflow-wrap: anywhere;}
+
+/* ---------- Empty-state steps ---------- */
+.steps {display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 1.2rem;}
+.step {padding: 20px; border-radius: 16px; background: rgba(255,252,245,.65); border: 1px solid rgba(255,255,255,.85);
+       box-shadow: 0 8px 26px rgba(120,90,50,.10);}
+.step b {display: block; font-family: 'Fraunces', Georgia, serif !important; font-size: 20px; margin: 2px 0 6px; color: #1F1B16;}
+.step span {font-size: 14.5px; line-height: 1.55; color: #5C5446;}
+.step i {font-style: normal; font-size: 12px; font-weight: 700; letter-spacing: .14em; color: #B5482A;}
+
+/* ---------- Inputs ---------- */
+div[data-baseweb="input"], div[data-baseweb="select"] > div {
+  background: rgba(255,255,255,.75) !important;
+  border: 1px solid rgba(255,255,255,.9) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 10px rgba(120,90,50,.08);
+  font-weight: 500; font-size: 15.5px;
+}
+div[data-baseweb="input"] input {font-weight: 500; font-size: 15.5px;}
+
+/* ---------- Buttons ---------- */
+.stButton > button, [data-testid="stPopover"] > div > button {
+  border-radius: 12px; font-weight: 600; font-size: 15.5px; letter-spacing: 0; min-height: 44px;
+  transition: transform .12s ease, box-shadow .12s ease;}
+.stButton > button:hover {transform: translateY(-1px);}
+button[kind="secondary"], button[data-testid="stBaseButton-secondary"], [data-testid="stPopover"] > div > button {
+  background: rgba(255,255,255,.75) !important; border: 1px solid rgba(255,255,255,.95) !important;
+  color: #2B261E !important; box-shadow: 0 2px 10px rgba(120,90,50,.08);
+}
+button[kind="primary"], button[data-testid="stBaseButton-primary"] {
+  background: linear-gradient(135deg, #C4552F, #A63F22) !important; border: none !important;
+  color: #fff !important; box-shadow: 0 6px 18px rgba(181,72,42,.35), inset 0 1px 0 rgba(255,255,255,.25);
+}
+button[kind="primary"]:hover, button[data-testid="stBaseButton-primary"]:hover {
+  box-shadow: 0 10px 24px rgba(181,72,42,.45), inset 0 1px 0 rgba(255,255,255,.3);
+}
+/* text-style button (Clear history) */
+button[kind="tertiary"], button[data-testid="stBaseButton-tertiary"] {
+  background: transparent !important; border: none !important; box-shadow: none !important;
+  color: #B5482A !important; font-size: 14px !important; font-weight: 600; min-height: 32px !important;
+  padding: 0 4px !important; text-decoration: underline; text-underline-offset: 3px;
+}
+
+/* ---------- Tablet and phone: sidebar becomes a top bar with a Menu button ---------- */
+@media (max-width: 900px) {
+  [data-testid="stSidebar"], [data-testid="stExpandSidebarButton"],
+  [data-testid="stSidebarCollapsedControl"] {display: none !important;}
+  .st-key-mobilebar {display: block; margin-bottom: .6rem;}
+  .st-key-mobilebar [data-testid="stHorizontalBlock"] {flex-direction: row !important; flex-wrap: nowrap !important; align-items: center !important; gap: .5rem;}
+  .st-key-mobilebar [data-testid="stColumn"] {min-width: 0 !important; width: auto !important; flex: 1 1 auto !important;}
+  .st-key-mobilebar [data-testid="stColumn"]:last-child {flex: 0 0 auto !important;}
+  a.brand {font-size: 28px;}
+  .block-container {padding-top: 1.2rem; padding-left: 1.2rem; padding-right: 1.2rem;}
+}
+@media (max-width: 640px) {
+  .stApp {background-attachment: scroll; font-size: 15px;}
+  .block-container {padding-left: 1rem; padding-right: 1rem; padding-bottom: 2rem;}
+  .pbox {font-size: 13.5px; padding: 12px;}
+  .banner {padding: 14px 16px;}
+  div[data-testid="stVerticalBlockBorderWrapper"]:hover {transform: none;}
+}
+
+/* Keep the desktop sidebar always visible, even after resizing from a small screen */
+@media (min-width: 901px) {
+  section[data-testid="stSidebar"],
+  section[data-testid="stSidebar"][aria-expanded="false"] {
+    display: flex !important;
+    visibility: visible !important;
+    transform: none !important;
+    margin-left: 0 !important;
+    min-width: 320px !important;
+    width: 320px !important;
+    position: relative !important;
+  }
+}
