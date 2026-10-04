@@ -15,7 +15,7 @@
   <a href="#limitations">Limitations</a>
 </p>
 
-> 🎃 Built for the **DEV Hacktoberfest Weekend Challenge: Build for a Friend**.
+> <p align="center">🎃 Built for the **DEV Hacktoberfest Weekend Challenge: Build for a Friend**.</p>
 
 ---
 
