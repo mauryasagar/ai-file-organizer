@@ -11,6 +11,7 @@ from organizer import LOG_NAME, apply_plan, undo
 from scanner import scan_folder
 
 APP_NAME = "Organizr"
+LOGO = "🗁"
 HISTORY = Path("history.json")
 
 st.set_page_config(page_title=APP_NAME, page_icon="📁", layout="wide")
@@ -18,34 +19,127 @@ st.set_page_config(page_title=APP_NAME, page_icon="📁", layout="wide")
 st.markdown(
     """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap');
-html, body, [class*="css"], .stApp {font-family: 'DM Sans', sans-serif;}
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+html, body, [class*="css"], .stApp {font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased;}
 #MainMenu, footer, header {visibility: hidden;}
-.block-container {padding-top: 2rem; padding-bottom: 5rem; max-width: 1250px;}
-[data-testid="stSidebar"] {background: #EFE8D8; border-right: 1px solid #DDD4C0;}
-.brand {font-family: 'Fraunces', serif; font-size: 30px; font-weight: 700; color: #B5482A; margin-bottom: 1rem;}
-.eyebrow {font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #8A806C; margin: 1.2rem 0 .4rem 0;}
-.hist {font-size: 14px; padding: 6px 2px; color: #3B352B;}
-.hist span {font-size: 12px; color: #8A806C;}
-.title {font-family: 'Fraunces', serif; font-size: 34px; font-weight: 600; line-height: 1.1;}
-.sub {font-size: 13px; color: #7A705F; margin: .3rem 0 1rem 0;}
-.fname {font-weight: 700; font-size: 15px;}
-.reason {font-size: 12px; color: #7A705F; margin-top: 2px;}
+[data-testid="stSidebarCollapseButton"],
+[data-testid="stSidebarCollapsedControl"],
+[data-testid="stSidebarHeader"] {display: none !important;}
+
+/* ---------- Backdrop (gives the glass something to blur) ---------- */
+.stApp {
+  background:
+    radial-gradient(700px 500px at 8% 12%, rgba(181,72,42,.22), transparent 60%),
+    radial-gradient(650px 500px at 92% 18%, rgba(224,170,92,.28), transparent 60%),
+    radial-gradient(700px 600px at 70% 95%, rgba(120,150,110,.20), transparent 60%),
+    #F6F1E7;
+  background-attachment: fixed;
+}
+[data-testid="stAppViewContainer"], [data-testid="stMain"] {background: transparent !important;}
+.block-container {padding-top: 2.4rem; padding-bottom: 6rem; max-width: 1250px;}
+
+/* ---------- Sidebar (frosted) ---------- */
+[data-testid="stSidebar"] {
+  background: rgba(255,250,240,.55) !important;
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border-right: 1px solid rgba(255,255,255,.7);
+  box-shadow: 4px 0 30px rgba(120,90,50,.08);
+}
+[data-testid="stSidebarUserContent"] {padding-top: 3rem;}
+a.brand, a.brand:visited, a.brand:hover {
+  font-family: 'Fraunces', serif; font-size: 32px; font-weight: 800; letter-spacing: -.02em;
+  background: linear-gradient(135deg, #B5482A, #D9803F);
+  -webkit-background-clip: text; background-clip: text; color: transparent !important;
+  text-decoration: none !important; display: inline-block; margin-bottom: .6rem;
+}
+.eyebrow {font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+          color: #9A8D74; margin: 1.5rem 0 .5rem 0;}
+.hist {font-size: 14px; font-weight: 600; padding: 8px 12px; color: #3B352B; border-radius: 10px;
+       background: rgba(255,255,255,.45); border: 1px solid rgba(255,255,255,.7); margin-bottom: 6px;}
+.hist span {font-size: 12px; font-weight: 400; color: #8A806C;}
+
+/* ---------- Typography ---------- */
+.title {font-family: 'Fraunces', serif; font-size: 46px; font-weight: 700; letter-spacing: -.025em;
+        line-height: 1.05; color: #1F1B16; margin-bottom: .5rem;}
+.sub {font-size: 13.5px; font-weight: 500; color: #7A705F; margin: .4rem 0 1rem 0;}
+.fname {font-weight: 700; font-size: 15.5px; color: #1F1B16; letter-spacing: -.005em;}
+.reason {font-size: 12.5px; color: #7A705F; margin-top: 3px; line-height: 1.45;}
 .warn {color: #B5482A; font-weight: 700;}
-.pbox {padding: 14px; border-radius: 10px; background: #F6F1E7; font-size: 13px; line-height: 1.55;
-       color: #4A4336; white-space: pre-wrap; word-break: break-word;}
-.pname {font-weight: 700; font-size: 16px; margin-bottom: .6rem;}
-.pwhy {font-size: 13px; line-height: 1.5; color: #4A4336;}
-.banner {padding: 16px 20px; border-radius: 12px; background: #E7F2E8; border: 1px solid #BCD9C0; margin: 1rem 0;}
-.banner b {color: #1F5A33; font-size: 15px;} .banner div {color: #3F7A55; font-size: 13px; margin-top: 2px;}
-.fcard {padding: 14px 16px; border-radius: 10px; background: #FFFCF5; border: 1px solid #E4DBC6; margin-bottom: 10px;}
+
+/* ---------- Glass surfaces ---------- */
+div[data-testid="stVerticalBlockBorderWrapper"] {
+  background: rgba(255,252,245,.58) !important;
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255,255,255,.75) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 28px rgba(120,90,50,.10), inset 0 1px 0 rgba(255,255,255,.8);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+div[data-testid="stVerticalBlockBorderWrapper"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 34px rgba(120,90,50,.16), inset 0 1px 0 rgba(255,255,255,.9);
+}
+.pbox {padding: 16px; border-radius: 14px; font-size: 13px; line-height: 1.6; color: #4A4336;
+       background: rgba(255,252,245,.6); border: 1px solid rgba(255,255,255,.8);
+       backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+       box-shadow: 0 6px 22px rgba(120,90,50,.10);
+       white-space: pre-wrap; word-break: break-word;
+       font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;}
+.pname {font-family: 'Fraunces', serif; font-weight: 700; font-size: 20px; letter-spacing: -.01em; margin-bottom: .7rem;}
+.pwhy {font-size: 13.5px; line-height: 1.55; color: #4A4336;}
+.banner {padding: 18px 22px; border-radius: 16px; margin: 1rem 0;
+         background: rgba(226,242,229,.65); border: 1px solid rgba(255,255,255,.8);
+         backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+         box-shadow: 0 8px 28px rgba(60,120,80,.12);}
+.banner b {color: #1F5A33; font-size: 16px; font-family: 'Fraunces', serif; font-weight: 700;}
+.banner div {color: #3F7A55; font-size: 13px; margin-top: 3px;}
+.fcard {padding: 16px 18px; border-radius: 16px; margin-bottom: 12px;
+        background: rgba(255,252,245,.6); border: 1px solid rgba(255,255,255,.8);
+        backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 8px 26px rgba(120,90,50,.10);}
+.fcard b {font-family: 'Fraunces', serif; font-weight: 700; font-size: 17px;}
 .fcard span {font-size: 13px; color: #7A705F;}
-div[data-testid="stVerticalBlockBorderWrapper"] {background: #FFFCF5; border-color: #E4DBC6 !important; border-radius: 10px;}
-.stButton > button {border-radius: 8px; font-weight: 700;}
-.statusbar {position: fixed; left: 0; right: 0; bottom: 0; height: 40px; background: #EFE8D8;
-            border-top: 1px solid #DDD4C0; display: flex; align-items: center; padding: 0 24px;
-            font-size: 13px; color: #5C5446; z-index: 999;}
-.dot {width: 7px; height: 7px; border-radius: 50%; background: #3FA66B; margin-right: 8px; display: inline-block;}
+
+/* ---------- Inputs ---------- */
+div[data-baseweb="input"], div[data-baseweb="select"] > div {
+  background: rgba(255,255,255,.62) !important;
+  border: 1px solid rgba(255,255,255,.85) !important;
+  border-radius: 12px !important;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(120,90,50,.08);
+  font-weight: 500;
+}
+div[data-baseweb="input"] input {font-weight: 500;}
+
+/* ---------- Buttons ---------- */
+.stButton > button {border-radius: 12px; font-weight: 600; letter-spacing: .005em;
+                    transition: transform .12s ease, box-shadow .12s ease;}
+.stButton > button:hover {transform: translateY(-1px);}
+button[kind="secondary"], button[data-testid="stBaseButton-secondary"] {
+  background: rgba(255,255,255,.6) !important; border: 1px solid rgba(255,255,255,.9) !important;
+  color: #2B261E !important; backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(120,90,50,.08);
+}
+button[kind="primary"], button[data-testid="stBaseButton-primary"] {
+  background: linear-gradient(135deg, #C4552F, #A63F22) !important; border: none !important;
+  color: #fff !important; box-shadow: 0 6px 18px rgba(181,72,42,.35), inset 0 1px 0 rgba(255,255,255,.25);
+}
+button[kind="primary"]:hover, button[data-testid="stBaseButton-primary"]:hover {
+  box-shadow: 0 10px 24px rgba(181,72,42,.45), inset 0 1px 0 rgba(255,255,255,.3);
+}
+
+/* ---------- Status bar ---------- */
+.statusbar {position: fixed; left: 0; right: 0; bottom: 0; height: 42px;
+            background: rgba(255,250,240,.6); backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            border-top: 1px solid rgba(255,255,255,.75); display: flex; align-items: center;
+            padding: 0 24px; font-size: 13px; font-weight: 500; color: #5C5446; z-index: 999;}
+.dot {width: 8px; height: 8px; border-radius: 50%; background: #3FA66B; margin-right: 9px; display: inline-block;
+      box-shadow: 0 0 0 4px rgba(63,166,107,.22);}
+div[data-testid="stVerticalBlockBorderWrapper"] {padding-bottom: 6px;}
 </style>
 """,
     unsafe_allow_html=True,
@@ -90,7 +184,10 @@ for key, val in {"folder": "test_folder", "plan": None, "done": None, "sel": 0, 
 
 # ---------- Sidebar ----------
 with st.sidebar:
-    st.markdown(f'<div class="brand">{APP_NAME}</div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<a class="brand" href="/" target="_self">{LOGO} {APP_NAME}</a>',
+        unsafe_allow_html=True,
+    )
     st.markdown('<div class="eyebrow">Locations</div>', unsafe_allow_html=True)
     for name in ("Downloads", "Documents", "Desktop"):
         st.button(name, key=f"loc_{name}", on_click=set_folder, args=(Path.home() / name,), width="stretch")
