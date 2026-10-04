@@ -1,4 +1,4 @@
-<h1 align="center">📁 Organizr</h1>
+<h1 align="center">🗁 Organizr</h1>
 
 <p align="center">
   <b>An offline AI file organizer that sorts your files by what's inside them, not by their extension.</b><br>
