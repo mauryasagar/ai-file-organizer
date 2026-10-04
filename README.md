@@ -40,9 +40,19 @@ Organizr reads the **content** of each file and suggests the folder it belongs i
 
 ## See it in action
 
+<p align="center">
+  <img src="docs/screenshots/home.png" alt="Home screen" width="720">
+</p>
+
+<table align="center">
+  <tr>
+    <td align="center"><b>Plan</b><br><img src="docs/screenshots/plan.png" alt="Plan view" width="400"></td>
+    <td align="center"><b>Done</b><br><img src="docs/screenshots/done.png" alt="Done view" width="400"></td>
+  </tr>
+</table>
 <!--
 Add screenshots to docs/screenshots/, then uncomment:
-
+![Home](docs/screenshots/home.png)
 ![Plan view](docs/screenshots/plan.png)
 ![Done view](docs/screenshots/done.png)
 -->
