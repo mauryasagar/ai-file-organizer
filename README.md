@@ -52,12 +52,7 @@ Organizr reads the **content** of each file and suggests the folder it belongs i
     <td align="center"><img src="docs/screenshots/done.png" alt="Done view" width="400"><br><b>Done</b></td>
   </tr>
 </table>
-<!--
-Add screenshots to docs/screenshots/, then uncomment:
-![Home](docs/screenshots/home.png)
-![Plan view](docs/screenshots/plan.png)
-![Done view](docs/screenshots/done.png)
--->
+
 
 1. Pick a location (Downloads, Documents, Desktop) or paste a folder path, then click **Scan and plan**.
 2. Review the plan, with a short reason from Gemma for every file.
