@@ -13,7 +13,7 @@ from scanner import scan_folder
 APP_NAME = "Organizr"
 LOGO = "🗁"
 HISTORY = Path("history.json")
-STYLE = Path(__file__).parent / "style.css"
+STYLE = Path(__file__).parent / "static" / "style.css"
 
 st.set_page_config(page_title=APP_NAME, page_icon="📁", layout="wide", initial_sidebar_state="expanded")
 

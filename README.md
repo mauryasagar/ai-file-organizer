@@ -15,6 +15,8 @@
   <a href="#limitations">Limitations</a>
 </p>
 
+> 🎃 Built for the **DEV Hacktoberfest Weekend Challenge: Build for a Friend**.
+
 ---
 
 ## The Problem
@@ -39,16 +41,17 @@ Organizr reads the **content** of each file and suggests the folder it belongs i
 ## See it in action
 
 <!--
-Add screenshots to a docs/ folder, then uncomment:
+Add screenshots to docs/screenshots/, then uncomment:
 
-![Plan view](docs/plan.png)
-![Before and after](docs/before-after.png)
+![Plan view](docs/screenshots/plan.png)
+![Done view](docs/screenshots/done.png)
 -->
 
-1. Point Organizr at a folder and click **Scan and plan**.
-2. Review the table of proposed categories, with a short reason for each.
-3. Change anything you disagree with, then click **Apply moves**.
-4. Changed your mind? Click **Undo last move** and everything goes back.
+1. Pick a location (Downloads, Documents, Desktop) or paste a folder path, then click **Scan and plan**.
+2. Review the plan, with a short reason from Gemma for every file.
+3. Click **View** on any file to preview its text next to the decision.
+4. Change any category you disagree with, then click **Apply moves**.
+5. Changed your mind? Click **Undo last move** and everything goes back.
 
 ## How it works
 
@@ -57,7 +60,7 @@ flowchart LR
     A[Folder] --> B[scanner.py<br/>find safe files]
     B --> C[extractor.py<br/>read text]
     C --> D[classifier.py<br/>local Gemma picks a category]
-    D --> E[Plan table<br/>review and edit]
+    D --> E[Plan view<br/>review and edit]
     E -->|Apply| F[organizer.py<br/>move files]
     F --> G[(undo_log.json)]
     G -->|Undo| A
@@ -93,10 +96,11 @@ sequenceDiagram
 
 - Reads PDF, DOCX, TXT, MD, CSV and JSON files
 - Classifies by content and ignores misleading filenames
-- Editable plan table with a reason for every decision
-- Dry run by default, with one-click undo
+- Editable plan with a reason for every decision and a text preview per file
+- Dry run by default, with one-click undo and a run history
 - Safe moves: never deletes, never overwrites (collisions get `_1`, `_2`)
 - Skips unfinished downloads (`.crdownload`, `.tmp`) and files changed in the last 5 minutes
+- Responsive interface that works on desktop, tablet and phone-sized windows
 - Fully customizable categories
 
 ## Getting started
@@ -134,15 +138,20 @@ Edit `categories.json` to match your own folders:
 
 ```
 ai-file-organizer/
-├── app.py              # Streamlit interface: plan table, apply, undo
+├── app.py              # Streamlit interface: plan, preview, apply, undo, history
 ├── scanner.py          # Finds files, skips temp and recent downloads
 ├── extractor.py        # Pulls the first ~1000 characters of text
 ├── classifier.py       # Asks local Gemma for a category and a reason
 ├── organizer.py        # Builds the plan, moves files safely, undo
 ├── categories.json     # Your folder categories
 ├── requirements.txt
+├── static/
+│   └── style.css       # App styling
+├── docs/
+│   └── screenshots/    # Images used in this README
 ├── .streamlit/
 │   └── config.toml     # App theme
+├── LICENSE
 └── README.md
 ```
 
@@ -151,14 +160,17 @@ ai-file-organizer/
 - Borderline files sometimes land in "Other" (for example a personal expense CSV)
 - Scanned PDFs and image-only files need OCR, which is not included yet
 - Only files directly inside the chosen folder are scanned, not subfolders
+- Gemma's wording of reasons varies slightly from run to run
 
 ## Built with
 
-Python · [Ollama](https://ollama.com) · [Gemma](https://ai.google.dev/gemma) · Streamlit · PyMuPDF · python-docx · pandas
+Python · Ollama · Gemma · Streamlit · PyMuPDF · python-docx · pandas
 
 ## Built for a friend
 
-Made for the DEV **Hacktoberfest Weekend Challenge: Build for a Friend**. The goal was to solve one real person's problem with open-source AI, and to keep her private files private.
+> 🎃 Made for the **DEV Hacktoberfest Weekend Challenge: Build for a Friend**.
+
+The goal was to solve one real person's problem with open-source AI, and to keep her private files private.
 
 ## License
 
