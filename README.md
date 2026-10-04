@@ -1,21 +1,60 @@
-# 📁 Organizr
+<h1 align="center">📁 Organizr</h1>
 
-**An offline AI file organizer that sorts by what's *inside* your files, not by their extension.**
+<p align="center">
+  <b>An offline AI file organizer that sorts your files by what's inside them, not by their extension.</b><br>
+  It reads each document with a local open-weight model (Gemma via Ollama), proposes where it belongs,<br>
+  and moves files only after you approve. Your private files never leave your laptop.
+</p>
 
-Your Downloads folder is full of private things: fee receipts, ID scans, marksheets, bank statements. Organizr reads each file with a local open-weight model (Gemma via Ollama), proposes where it belongs, and moves files only after you approve. Nothing is uploaded anywhere.
+<p align="center">
+  <a href="#the-problem">Problem</a> ·
+  <a href="#the-solution">Solution</a> ·
+  <a href="#how-it-works">How it works</a> ·
+  <a href="#getting-started">Getting started</a> ·
+  <a href="#project-structure">Structure</a> ·
+  <a href="#limitations">Limitations</a>
+</p>
 
-Built for a friend with a chaotic Downloads folder, for the DEV Hacktoberfest Weekend Challenge: *Build for a Friend*.
+---
 
-## Why open-source AI?
-- **Privacy:** documents never leave the laptop. It works with Wi-Fi off.
-- **Cost:** no API keys, no per-file charges.
-- **Control:** categories live in a plain JSON file, and the model can be swapped by changing one line (`gemma3:1b` and `gemma3:4b` were both tested).
+## The Problem
+
+Downloads folders turn into a dumping ground. This project started with a friend whose folder mixed lecture PDFs, fee receipts, assignment files, scholarship letters and random images, all with names like `doc_final.pdf` and `scan (3).pdf`.
+
+Existing options did not fit:
+
+- **Extension-based sorters** put every PDF in one folder, so a fee receipt lands next to lecture notes.
+- **Cloud AI tools** would mean uploading ID scans, marksheets and bank statements to someone else's server.
+- **Doing it by hand** works once, then the mess returns.
+
+## The Solution
+
+Organizr reads the **content** of each file and suggests the folder it belongs in, using a model that runs entirely on your own machine.
+
+- **Content-aware:** a file called `img_001.txt` that contains a DBMS assignment goes to *Assignments*.
+- **Private by design:** works with Wi-Fi turned off, with no API keys and no uploads.
+- **You stay in control:** you review a plan first, edit any category, then apply. Every move can be undone.
+- **Your categories:** folders are defined in a plain JSON file, so it adapts to anyone's life.
+
+## See it in action
+
+<!--
+Add screenshots to a docs/ folder, then uncomment:
+
+![Plan view](docs/plan.png)
+![Before and after](docs/before-after.png)
+-->
+
+1. Point Organizr at a folder and click **Scan and plan**.
+2. Review the table of proposed categories, with a short reason for each.
+3. Change anything you disagree with, then click **Apply moves**.
+4. Changed your mind? Click **Undo last move** and everything goes back.
 
 ## How it works
 
 ```mermaid
 flowchart LR
-    A[Folder] --> B[scanner.py<br/>list safe files]
+    A[Folder] --> B[scanner.py<br/>find safe files]
     B --> C[extractor.py<br/>read text]
     C --> D[classifier.py<br/>local Gemma picks a category]
     D --> E[Plan table<br/>review and edit]
@@ -24,83 +63,103 @@ flowchart LR
     G -->|Undo| A
 ```
 
+Nothing is moved until you click Apply:
+
 ```mermaid
 sequenceDiagram
-    participant U as User
-    participant UI as Streamlit UI
+    participant U as You
+    participant UI as Streamlit app
     participant G as Gemma (Ollama)
     participant FS as File system
     U->>UI: Scan and plan
     UI->>FS: List files, read text
-    UI->>G: Content + categories
-    G-->>UI: Category + reason (JSON)
-    UI-->>U: Editable plan (nothing moved yet)
+    UI->>G: Content + your categories
+    G-->>UI: Category + reason
+    UI-->>U: Editable plan (nothing moved)
     U->>UI: Apply moves
-    UI->>FS: Move files, write undo log
-    U->>UI: Undo
-    UI->>FS: Restore every file
+    UI->>FS: Move files, save undo log
+```
+
+## Why open-source AI?
+
+| | Cloud AI | Organizr (local Gemma) |
+|---|---|---|
+| Your documents | Uploaded to a server | Stay on your laptop |
+| Cost | Per-request billing | Free after download |
+| Internet needed | Yes | No |
+| Model choice | Fixed by provider | Swap with one line |
+
+## Features
+
+- Reads PDF, DOCX, TXT, MD, CSV and JSON files
+- Classifies by content and ignores misleading filenames
+- Editable plan table with a reason for every decision
+- Dry run by default, with one-click undo
+- Safe moves: never deletes, never overwrites (collisions get `_1`, `_2`)
+- Skips unfinished downloads (`.crdownload`, `.tmp`) and files changed in the last 5 minutes
+- Fully customizable categories
+
+## Getting started
+
+**Requirements:** Python 3.10+, [Ollama](https://ollama.com), and about 5 GB of free RAM for the 4B model.
+
+```bash
+# 1. Get the code
+git clone https://github.com/mauryasagar/ai-file-organizer.git
+cd ai-file-organizer
+
+# 2. Install dependencies
+python -m venv .venv
+# Windows: .venv\Scripts\activate    macOS/Linux: source .venv/bin/activate
+pip install -r requirements.txt
+
+# 3. Download the model
+ollama pull gemma3:4b
+
+# 4. Run
+streamlit run app.py
+```
+
+To use a different model, change `MODEL` in `classifier.py`. `gemma3:1b` is faster but less accurate.
+
+### Make it yours
+
+Edit `categories.json` to match your own folders:
+
+```json
+["Lecture Notes", "Fee Receipts", "Assignments", "Scholarship Papers", "Personal", "Other"]
 ```
 
 ## Project structure
 
 ```
 ai-file-organizer/
-├── app.py              # Streamlit interface (plan table, apply, undo)
-├── scanner.py          # Finds files; skips temp/partial/recent downloads
-├── extractor.py        # Pulls the first ~1000 chars from PDF, DOCX, TXT, CSV...
-├── classifier.py       # Sends content to local Gemma, returns category + reason
+├── app.py              # Streamlit interface: plan table, apply, undo
+├── scanner.py          # Finds files, skips temp and recent downloads
+├── extractor.py        # Pulls the first ~1000 characters of text
+├── classifier.py       # Asks local Gemma for a category and a reason
 ├── organizer.py        # Builds the plan, moves files safely, undo
-├── categories.json     # Your folders, edit freely
+├── categories.json     # Your folder categories
 ├── requirements.txt
 ├── .streamlit/
-│   └── config.toml     # Dark purple theme
+│   └── config.toml     # App theme
 └── README.md
 ```
 
-## Run it
+## Limitations
 
-1. Install [Ollama](https://ollama.com) and pull a model:
-```
-   ollama pull gemma3:4b
-```
-2. Install dependencies:
-```
-   pip install -r requirements.txt
-```
-3. Edit `categories.json` to match your own life.
-4. Start the app:
-```
-   streamlit run app.py
-```
-   To use a different model, change `MODEL` in `classifier.py`.
+- Borderline files sometimes land in "Other" (for example a personal expense CSV)
+- Scanned PDFs and image-only files need OCR, which is not included yet
+- Only files directly inside the chosen folder are scanned, not subfolders
 
-## Safety by design
-- **Dry run first:** nothing moves until you click Apply.
-- **Editable plan:** you can change any category before applying.
-- **Never deletes or overwrites:** name collisions get `_1`, `_2` suffixes.
-- **Skips risky files:** `.crdownload`, `.tmp`, and anything modified in the last 5 minutes.
-- **One-click undo** from a saved move log.
+## Built with
 
-## Tested on
-A mixed set of notes, receipts, assignments, scholarship letters and personal files with deliberately misleading names (`doc_final.txt`, `img_001.txt`).
+Python · [Ollama](https://ollama.com) · [Gemma](https://ai.google.dev/gemma) · Streamlit · PyMuPDF · python-docx · pandas
 
-| Model | Correct on test set | Notes |
-|---|---|---|
-| gemma3:1b | 4 / 6 | Fast, but confused by borderline files |
-| gemma3:4b | 5 / 6 | More accurate; slower on CPU |
+## Built for a friend
 
-## Known limitations
-- Small models sometimes choose "Other" for borderline files (e.g. a personal expense CSV).
-- Image-only files and scanned PDFs need OCR, which is not included yet.
-- Only the files directly inside the folder are scanned (no subfolders).
-
-## Roadmap
-- OCR for scans and screenshots
-- "Find my file" search by meaning
-- Per-user category presets
-
-## Tech
-Python, Ollama, Gemma, PyMuPDF, python-docx, pandas, Streamlit.
+Made for the DEV **Hacktoberfest Weekend Challenge: Build for a Friend**. The goal was to solve one real person's problem with open-source AI, and to keep her private files private.
 
 ## License
+
 MIT
